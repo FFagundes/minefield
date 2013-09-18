@@ -21,6 +21,7 @@ def cria_campo():
             campo_lin.append('#')
         campo.append(campo_lin)
 
+
 class cores:
     HEADER = '\033[105;30;1m'
     OKBLUE = '\033[104;30;1m'
@@ -42,7 +43,8 @@ class cores:
         self.LTFAIL_T = ''
         self.ENDC = ''
 
-def desenha_campo(is_alive = True):
+
+def desenha_campo(is_alive=True):
     system('clear')
     print '\n'
     for num_lin, lin in enumerate(campo):
@@ -53,114 +55,118 @@ def desenha_campo(is_alive = True):
                 if (num_col, num_lin) == pos:
                     if type(col) is int:
                         if col == 0:
-                            print cores.OKGREEN , ' ' , cores.ENDC,
+                            print cores.OKGREEN, ' ', cores.ENDC,
                         else:
-                            print cores.OKGREEN , str(col) , cores.ENDC,
+                            print cores.OKGREEN, str(col), cores.ENDC,
 
                     elif col == '$' or col == '%':
-                        print cores.OKGREEN , 'F' , cores.ENDC,
+                        print cores.OKGREEN, 'F', cores.ENDC,
 
                     else:
-                        print cores.OKGREEN , ' ' , cores.ENDC,
+                        print cores.OKGREEN, ' ', cores.ENDC,
                 elif type(col) is int:
                     if col == 0:
-                        print cores.WARNING , ' ' , cores.ENDC,
+                        print cores.WARNING, ' ', cores.ENDC,
 
                     else:
-                        print cores.LTWARNING , str(col) , cores.ENDC,
+                        print cores.LTWARNING, str(col), cores.ENDC,
 
                 elif col == '$' or col == '%':
-                    print cores.LTFAIL , 'F' , cores.ENDC,
+                    print cores.LTFAIL, 'F', cores.ENDC,
                 else:
-                    print cores.OKBLUE , ' ' , cores.ENDC,
+                    print cores.OKBLUE, ' ', cores.ENDC,
             else:
                 if type(col) is int:
                     if col == 0:
-                        print cores.WARNING , ' ' , cores.ENDC,
+                        print cores.WARNING, ' ', cores.ENDC,
                     else:
-                        print cores.LTWARNING , str(col) , cores.ENDC,
+                        print cores.LTWARNING, str(col), cores.ENDC,
 
                 elif col == '%':
-                    print cores.LTFAIL , 'F' , cores.ENDC,
+                    print cores.LTFAIL, 'F', cores.ENDC,
 
-                elif col == '*' or col =='@':
-                    print cores.FAIL , str(col) , cores.ENDC,
+                elif col == '*' or col == '@':
+                    print cores.FAIL, str(col), cores.ENDC,
 
                 elif col == '$':
-                    print cores.LTFAIL_T , 'F' , cores.ENDC,                    
+                    print cores.LTFAIL_T, 'F', cores.ENDC,
                 else:
-                    print cores.OKBLUE , ' ' , cores.ENDC,
+                    print cores.OKBLUE, ' ', cores.ENDC,
         print '\n'
     print
+
 
 def preenche_bombas():
     for num_linha, linha in enumerate(campo):
         for num_coluna, coluna in enumerate(linha):
-             random = randint(0, 99)
-             if random < dificuldade:
+            random = randint(0, 99)
+            if random < dificuldade:
                 campo[num_linha][num_coluna] = '*'
 
-def valida_vizinho(linha, coluna , vizinho):
+
+def valida_vizinho(linha, coluna, vizinho):
     if vizinho == 't':
-        if linha-1 >= 0:
+        if linha - 1 >= 0:
             return True
 
     elif vizinho == 'b':
-        if linha+1 < tamanho:
+        if linha + 1 < tamanho:
             return True
 
     elif vizinho == 'r':
-        if coluna+1 < tamanho:
+        if coluna + 1 < tamanho:
             return True
 
     elif vizinho == 'l':
-        if coluna-1 >= 0:
+        if coluna - 1 >= 0:
             return True
 
     else:
         return False
+
 
 def procura_bomba(linha, coluna):
 
     bombas = 0
 
     if valida_vizinho(linha, coluna, 'r'):
-        if campo[linha][coluna+1] == "*" or campo[linha][coluna+1] == "$":
+        if campo[linha][coluna + 1] == "*" or campo[linha][coluna + 1] == "$":
             bombas += 1
 
     if valida_vizinho(linha, coluna, 'l'):
-        if campo[linha][coluna-1] == "*" or campo[linha][coluna-1] == "$":
+        if campo[linha][coluna - 1] == "*" or campo[linha][coluna - 1] == "$":
             bombas += 1
 
     if valida_vizinho(linha, coluna, 'b'):
-        if  campo[linha+1][coluna] == "*" or campo[linha+1][coluna] == "$":
+        if  campo[linha + 1][coluna] == "*" or campo[linha + 1][coluna] == "$":
             bombas += 1
 
     if valida_vizinho(linha, coluna, 't'):
-        if campo[linha-1][coluna] == "*" or campo[linha-1][coluna] == "$":
+        if campo[linha - 1][coluna] == "*" or campo[linha - 1][coluna] == "$":
             bombas += 1
 
     if valida_vizinho(linha, coluna, 'b') and valida_vizinho(linha, coluna, 'r'):
-        if  campo[linha+1][coluna+1] == "*" or campo[linha+1][coluna+1] == "$":
+        if  campo[linha + 1][coluna + 1] == "*" or campo[linha + 1][coluna + 1] == "$":
             bombas += 1
 
     if valida_vizinho(linha, coluna, 'b') and valida_vizinho(linha, coluna, 'l'):
-        if campo[linha+1][coluna-1] == "*" or campo[linha+1][coluna-1] == "$":
+        if campo[linha + 1][coluna - 1] == "*" or campo[linha + 1][coluna - 1] == "$":
             bombas += 1
 
     if valida_vizinho(linha, coluna, 't') and valida_vizinho(linha, coluna, 'r'):
-        if campo[linha-1][coluna+1] == "*" or campo[linha-1][coluna+1] == "$":
+        if campo[linha - 1][coluna + 1] == "*" or campo[linha - 1][coluna + 1] == "$":
             bombas += 1
 
     if valida_vizinho(linha, coluna, 't') and valida_vizinho(linha, coluna, 'l'):
-        if  campo[linha-1][coluna-1] == "*" or campo[linha-1][coluna-1] == "$":
+        if  campo[linha - 1][coluna - 1] == "*" or campo[linha - 1][coluna - 1] == "$":
             bombas += 1
-    
+
     if campo[linha][coluna] == "*" or campo[linha][coluna] == "$":
-    	campo[linha][coluna] = "@"
+        campo[linha][coluna] = "@"
         return "morreu"
 
     return bombas
+
 
 def seleciona(linha, coluna, is_mortal=True):
     casa_atual = campo[linha][coluna]
@@ -169,20 +175,20 @@ def seleciona(linha, coluna, is_mortal=True):
 
         if not selecao:
             if valida_vizinho(linha, coluna, 'r') and (not is_mortal or (is_mortal and casa_atual != '%')):
-               campo[linha][coluna] = selecao
-               seleciona(linha, coluna+1, False)
+                campo[linha][coluna] = selecao
+                seleciona(linha, coluna + 1, False)
 
             if valida_vizinho(linha, coluna, 'l') and (not is_mortal or (is_mortal and casa_atual != '%')):
                 campo[linha][coluna] = selecao
-                seleciona(linha, coluna-1, False)
+                seleciona(linha, coluna - 1, False)
 
             if valida_vizinho(linha, coluna, 'b') and (not is_mortal or (is_mortal and casa_atual != '%')):
                 campo[linha][coluna] = selecao
-                seleciona(linha+1, coluna, False)
+                seleciona(linha + 1, coluna, False)
 
             if valida_vizinho(linha, coluna, 't') and (not is_mortal or (is_mortal and casa_atual != '%')):
                 campo[linha][coluna] = selecao
-                seleciona(linha-1, coluna, False)
+                seleciona(linha - 1, coluna, False)
 
             # if valida_vizinho(linha, coluna, 'b') and valida_vizinho(linha, coluna, 'r'):
                 # campo[linha+1][coluna+1] = procura_bomba(linha+1, coluna+1)
@@ -198,11 +204,12 @@ def seleciona(linha, coluna, is_mortal=True):
 
         elif selecao == "morreu" and is_mortal:
             return False
-        
+
         if not is_mortal or (is_mortal and casa_atual != '%'):
             campo[linha][coluna] = selecao
 
     return True
+
 
 def valida_vitoria():
 
@@ -210,13 +217,14 @@ def valida_vitoria():
         for col in lin:
             if col == '*' or col == '#' or col == '%':
                 return False
-    
+
     return True
+
 
 def move_cursor(tecla, pos):
     # import pdb;pdb.set_trace()
 
-    x,y = pos
+    x, y = pos
 
     if tecla == 'w':
         y -= 1
@@ -229,7 +237,7 @@ def move_cursor(tecla, pos):
 
     elif tecla == 'd':
         x += 1
-    
+
     if x < 0:
         x = 0
 
@@ -242,7 +250,8 @@ def move_cursor(tecla, pos):
     if y >= tamanho:
         y = tamanho - 1
 
-    return (x,y)
+    return (x, y)
+
 
 def set_flag(pos):
     coluna, linha = pos
@@ -258,6 +267,7 @@ def set_flag(pos):
     elif campo[linha][coluna] == '#':
         campo[linha][coluna] = '%'
 
+
 def legenda():
     print "\n\tW - cima\tS - baixo\tA - esquerda\tD - direita\n\n\tH - seleciona\tJ - bandeira"
 
@@ -266,13 +276,13 @@ if __name__ == '__main__':
     dificuldade = 13
     tamanho = 12
     campo = []
-    pos = (0,0)
+    pos = (0, 0)
     direcional = ['w', 'a', 's', 'd']
 
     loop = True
     cria_campo()
     preenche_bombas()
-    
+
     while loop:
 
         coluna, linha = pos
@@ -289,7 +299,7 @@ if __name__ == '__main__':
             elif tecla == 'h':
                 if not seleciona(linha, coluna):
                     desenha_campo(False)
-                    print '\t' + cores.LTFAIL , 'VOCÊ MORREU!' , cores.ENDC + '\n'
+                    print '\t' + cores.LTFAIL, 'VOCÊ MORREU!', cores.ENDC + '\n'
                     loop = False
 
             elif tecla == 'j':
@@ -300,5 +310,5 @@ if __name__ == '__main__':
 
         if valida_vitoria():
             desenha_campo(False)
-            print '\t' + cores.OKGREEN , 'PARABÉNS! VOCÊ GANHOU!' , cores.ENDC + '\n'
+            print '\t' + cores.OKGREEN, 'PARABÉNS! VOCÊ GANHOU!', cores.ENDC + '\n'
             loop = False
