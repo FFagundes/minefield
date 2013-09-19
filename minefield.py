@@ -121,8 +121,7 @@ def valida_vizinho(linha, coluna, vizinho):
         if coluna - 1 >= 0:
             return True
 
-    else:
-        return False
+    return False
 
 
 def procura_bomba(linha, coluna):
@@ -174,33 +173,39 @@ def seleciona(linha, coluna, is_mortal=True):
         selecao = procura_bomba(linha, coluna)
 
         if not selecao:
-            if valida_vizinho(linha, coluna, 'r') and (not is_mortal or (is_mortal and casa_atual != '%')):
+            valid_cel = not is_mortal or (is_mortal and casa_atual != '%')
+
+            if valida_vizinho(linha, coluna, 'r') and valid_cel:
                 campo[linha][coluna] = selecao
                 seleciona(linha, coluna + 1, False)
 
-            if valida_vizinho(linha, coluna, 'l') and (not is_mortal or (is_mortal and casa_atual != '%')):
+            if valida_vizinho(linha, coluna, 'l') and valid_cel:
                 campo[linha][coluna] = selecao
                 seleciona(linha, coluna - 1, False)
 
-            if valida_vizinho(linha, coluna, 'b') and (not is_mortal or (is_mortal and casa_atual != '%')):
+            if valida_vizinho(linha, coluna, 'b') and valid_cel:
                 campo[linha][coluna] = selecao
                 seleciona(linha + 1, coluna, False)
 
-            if valida_vizinho(linha, coluna, 't') and (not is_mortal or (is_mortal and casa_atual != '%')):
+            if valida_vizinho(linha, coluna, 't') and valid_cel:
                 campo[linha][coluna] = selecao
                 seleciona(linha - 1, coluna, False)
 
-            # if valida_vizinho(linha, coluna, 'b') and valida_vizinho(linha, coluna, 'r'):
-                # campo[linha+1][coluna+1] = procura_bomba(linha+1, coluna+1)
+            if valida_vizinho(linha, coluna, 't') and valida_vizinho(linha, coluna, 'r') and valid_cel:
+                campo[linha][coluna] = selecao
+                seleciona(linha - 1, coluna + 1, False)
 
-            # if valida_vizinho(linha, coluna, 'b') and valida_vizinho(linha, coluna, 'l'):
-                # campo[linha+1][coluna-1] = procura_bomba(linha+1, coluna-1)
+            if valida_vizinho(linha, coluna, 'b') and valida_vizinho(linha, coluna, 'r') and valid_cel:
+                campo[linha][coluna] = selecao
+                seleciona(linha + 1, coluna + 1, False)
 
-            # if valida_vizinho(linha, coluna, 't') and valida_vizinho(linha, coluna, 'r'):
-                # campo[linha-1][coluna+1] = procura_bomba(linha-1, coluna+1)
+            if valida_vizinho(linha, coluna, 'b') and valida_vizinho(linha, coluna, 'l') and valid_cel:
+                campo[linha][coluna] = selecao
+                seleciona(linha + 1, coluna - 1, False)
 
-            # if valida_vizinho(linha, coluna, 't') and valida_vizinho(linha, coluna, 'l'):
-                # campo[linha-1][coluna-1] = procura_bomba(linha-1, coluna-1)
+            if valida_vizinho(linha, coluna, 't') and valida_vizinho(linha, coluna, 'l') and valid_cel:
+                campo[linha][coluna] = selecao
+                seleciona(linha - 1, coluna - 1, False)
 
         elif selecao == "morreu" and is_mortal:
             return False
@@ -215,7 +220,7 @@ def valida_vitoria():
 
     for lin in campo:
         for col in lin:
-            if col == '*' or col == '#' or col == '%':
+            if col in ('*', '#', '%'):
                 return False
 
     return True
